@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>To do application</title>
+</head>
+<body>
+    <section class="main">
+        <div class="container">
+            <p class="err"></p>
+            <h1>To-Do List <img src="images/icon.png"></h1>
+            <div class="search-bar">
+                <input id="search" type="text" placeholder="Add Task...">
+                <button type="submit">Add</button>
+            </div>
+            <ul class="task-list">               
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        const err = document.querySelector('.err');
+        const input = document.querySelector('#search');
+        const btn = document.querySelector('button[type=submit]');
+        const tasks= document.querySelector('.task-list');
+        const task = document.querySelector('.task-list > li');
+        btn.addEventListener('click',()=>{
+            let task = input.value;
+            if(task != ' '){                
+                err.textContent='';
+                let task_li = document.createElement('li');
+                task_li.textContent = task;               
+                tasks.insertAdjacentElement('beforeend',task_li);
+                let close = document.createElement('span');
+                close.textContent = '\u00d7';
+                task_li.appendChild(close)
+                input.value = ' ';
+                saveData();
+                
+            }else{
+                err.textContent='Write some thing !';
+            }
+        });
+
+        
+        
+            tasks.addEventListener('click',(e)=>{
+            if(e.target.tagName === 'LI'){
+                e.target.classList.toggle('checked');
+                saveData();
+            }else if(e.target.tagName === 'SPAN'){
+              e.target.parentNode.remove();
+              saveData();
+            }
+            
+        },false);
+        
+        function saveData(){
+            localStorage.setItem('data',tasks.innerHTML);
+        }
+       function showData(){
+        tasks.innerHTML = localStorage.getItem('data');
+       }
+        
+
+       showData();
+    </script>
+</body>
+</html>
